@@ -5,13 +5,13 @@
 #
 
 # Name of this project
-name : Terraform AWS SQS
+name : Terraform AWS Route53
 
 # License of this project
 license: "MIT"
 
 # Canonical GitHub repo
-github_repo: clouddrove/terraform-aws-sqs
+github_repo: clouddrove/terraform-aws-route53
 
 # Badges to display
 badges:
@@ -24,7 +24,7 @@ badges:
 
 #  description of this project
 description: |-
-  Terraform module to create SQS resource on AWS for managing queue.
+  Terraform module to create Route53 resource on AWS for zone and record set.
 
 # extra content
 # please not remove these two If you need add more
@@ -34,44 +34,48 @@ include:
 # How to use this project
 usage : |-
   Here are some examples of how you can use this module in your inventory structure:
-  ### FIFO Queue
+  ### Public Hostzone
   ```hcl
-    module "sqs" {
-      source                      = "git::https://github.com/clouddrove/terraform-aws-sqs.git"
-      name                        = "sqs-fifo"
-      application                 = "clouddrove"
-      environment                 = "test"
-      label_order                 = ["environment", "name", "application"]
-      fifo_queue                  = true
-      content_based_deduplication = true
+    module "route53" {
+      source         = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+      name           = "route53"
+      application    = "clouddrove"
+      environment    = "test"
+      label_order    = ["environment", "name", "application"]
+      public_enabled = true
+      record_enabled = true
+      domain_name    = "clouddrove.com"
+      type           = "A"
+      ttl            = 30
+      records        = ["10.0.0.27"]
     }
   ```
-  ### Standard Queue
+  ### Private Hostzone
   ```hcl
-    module "sqs" {
-      source                    = "git::https://github.com/clouddrove/terraform-aws-sqs.git"
-      name                      = "sqs"
-      application               = "clouddrove"
-      environment               = "test"
-      label_order               = ["environment", "name", "application"]
-      delay_seconds             = 90
-      max_message_size          = 2048
-      message_retention_seconds = 86400
-      receive_wait_time_seconds = 10
-      policy                    = data.aws_iam_policy_document.document.json
+    module "route53" {
+      source          = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+      name            = "route53"
+      application     = "clouddrove"
+      environment     = "test"
+      label_order     = ["environment", "name", "application"]
+      private_enabled = true
+      domain_name     = "clouddrove.com"
+      vpc_id          = "vpc-xxxxxxxxxxxxx"
     }
-
-    data "aws_iam_policy_document" "document" {
-      version = "2012-10-17"
-      statement {
-        sid    = "First"
-        effect = "Allow"
-        principals {
-          type        = "AWS"
-          identifiers = ["*"]
-        }
-        actions   = ["sqs:SendMessage"]
-        resources = ["arn:aws:sqs:eu-west-1:xxxxxxxxx:test-sqs-clouddrove"]
-      }
+  ```
+  ### Vpc Association
+  ```hcl
+    module "route53" {
+      source               = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+      name                 = "route53"
+      application          = "clouddrove"
+      environment          = "test"
+      label_order          = ["environment", "name", "application"]
+      private_enabled      = true
+      enabled              = true
+      domain_name          = "clouddrove.com"
+      vpc_id               = "vpc-xxxxxxxxxxxxx"
+      secondary_vpc_id     = "vpc-xxxxxxxxxxxxx"
+      secondary_vpc_region = "eu-west-1"
     }
   ```

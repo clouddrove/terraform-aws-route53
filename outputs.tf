@@ -7,3 +7,8 @@ output "zone_id" {
   )[0]
   description = "The Hosted Zone ID. This can be referenced by zone records."
 }
+
+output "tags" {
+  value       = module.labels.tags
+  description = "A mapping of tags to assign to the resource."
+}

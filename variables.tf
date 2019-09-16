@@ -62,6 +62,30 @@ variable "record_enabled" {
   description = "Whether to create Route53 record set."
 }
 
+variable "failover_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create Route53 record set."
+}
+
+variable "latency_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create Route53 record set."
+}
+
+variable "geolocation_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create Route53 record set."
+}
+
+variable "weighted_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create Route53 record set."
+}
+
 variable "domain_name" {
   type        = string
   description = "This is the name of the resource."
@@ -93,6 +117,7 @@ variable "vpc_id" {
 
 variable "type" {
   type        = string
+  default     = ""
   description = "The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. "
 }
 
@@ -152,4 +177,22 @@ variable "allow_overwrite" {
   type        = bool
   default     = false
   description = "Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments."
+}
+
+variable "enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create Route53 vpc association."
+}
+
+variable "secondary_vpc_id" {
+  type        = string
+  default     = ""
+  description = "The VPC to associate with the private hosted zone."
+}
+
+variable "secondary_vpc_region" {
+  type        = string
+  default     = ""
+  description = "The VPC's region. Defaults to the region of the AWS provider."
 }

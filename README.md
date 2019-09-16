@@ -4,11 +4,11 @@
 
 
 <h1 align="center">
-    Terraform AWS SQS
+    Terraform AWS Route53
 </h1>
 
 <p align="center" style="font-size: 1.2rem;">
-    Terraform module to create SQS resource on AWS for managing queue.
+    Terraform module to create Route53 resource on AWS for zone and record set.
      </p>
 
 <p align="center">
@@ -24,13 +24,13 @@
 </p>
 <p align="center">
 
-<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-aws-sqs'>
+<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-aws-route53'>
   <img title="Share on Facebook" src="https://user-images.githubusercontent.com/50652676/62817743-4f64cb80-bb59-11e9-90c7-b057252ded50.png" />
 </a>
-<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AWS+SQS&url=https://github.com/clouddrove/terraform-aws-sqs'>
+<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AWS+Route53&url=https://github.com/clouddrove/terraform-aws-route53'>
   <img title="Share on LinkedIn" src="https://user-images.githubusercontent.com/50652676/62817742-4e339e80-bb59-11e9-87b9-a1f68cae1049.png" />
 </a>
-<a href='https://twitter.com/intent/tweet/?text=Terraform+AWS+SQS&url=https://github.com/clouddrove/terraform-aws-sqs'>
+<a href='https://twitter.com/intent/tweet/?text=Terraform+AWS+Route53&url=https://github.com/clouddrove/terraform-aws-route53'>
   <img title="Share on Twitter" src="https://user-images.githubusercontent.com/50652676/62817740-4c69db00-bb59-11e9-8a79-3580fbbf6d5c.png" />
 </a>
 
@@ -61,53 +61,62 @@ This module has a few dependencies:
 
 
 
+
 ## Examples
 
-**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-aws-sqs/releases).
+
+**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-aws-route53/releases).
 
 
 Here are some examples of how you can use this module in your inventory structure:
-### FIFO Queue
+### Public Hostzone
 ```hcl
-  module "sqs" {
-    source                      = "git::https://github.com/clouddrove/terraform-aws-sqs.git"
-    name                        = "sqs-fifo"
-    application                 = "clouddrove"
-    environment                 = "test"
-    label_order                 = ["environment", "name", "application"]
-    fifo_queue                  = true
-    content_based_deduplication = true
+  module "route53" {
+    source         = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+    name           = "route53"
+    application    = "clouddrove"
+    environment    = "test"
+    label_order    = ["environment", "name", "application"]
+    public_enabled = true
+    record_enabled = true
+    domain_name    = "clouddrove.com"
+    type           = "A"
+    ttl            = 30
+    records        = ["10.0.0.27"]
   }
 ```
-### Standard Queue
+### Private Hostzone
 ```hcl
-  module "sqs" {
-    source                    = "git::https://github.com/clouddrove/terraform-aws-sqs.git"
-    name                      = "sqs"
-    application               = "clouddrove"
-    environment               = "test"
-    label_order               = ["environment", "name", "application"]
-    delay_seconds             = 90
-    max_message_size          = 2048
-    message_retention_seconds = 86400
-    receive_wait_time_seconds = 10
-    policy                    = data.aws_iam_policy_document.document.json
+  module "route53" {
+    source          = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+    name            = "route53"
+    application     = "clouddrove"
+    environment     = "test"
+    label_order     = ["environment", "name", "application"]
+    private_enabled = true
+    domain_name     = "clouddrove.com"
+    vpc_id          = "vpc-xxxxxxxxxxxxx"
   }
+```
+### Vpc Association
+```hcl
+  module "route53" {
+    source               = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+    name                 = "route53"
+    application          = "clouddrove"
+    environment          = "test"
+    label_order          = ["environment", "name", "application"]
+    private_enabled      = true
+    enabled              = true
+    domain_name          = "clouddrove.com"
+    vpc_id               = "vpc-xxxxxxxxxxxxx"
+    secondary_vpc_id     = "vpc-xxxxxxxxxxxxx"
+    secondary_vpc_region = "eu-west-1"
+  }
+```
 
-  data "aws_iam_policy_document" "document" {
-    version = "2012-10-17"
-    statement {
-      sid    = "First"
-      effect = "Allow"
-      principals {
-        type        = "AWS"
-        identifiers = ["*"]
-      }
-      actions   = ["sqs:SendMessage"]
-      resources = ["arn:aws:sqs:eu-west-1:xxxxxxxxx:test-sqs-clouddrove"]
-    }
-  }
-```
+
+
 
 
 
@@ -115,38 +124,52 @@ Here are some examples of how you can use this module in your inventory structur
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
+| alias | An alias block. Conflicts with ttl & records. Alias record documented below. | string | `` | no |
+| allow_overwrite | Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments. | bool | `false` | no |
 | application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
 | attributes | Additional attributes (e.g. `1`). | list | `<list>` | no |
-| content_based_deduplication | Enables content-based deduplication for FIFO queues. | bool | `false` | no |
-| create | Whether to create SQS queue. | bool | `true` | no |
-| delay_seconds | The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). | number | `0` | no |
+| comment | A comment for the hosted zone. Defaults to 'Managed by Terraform'. | string | `` | no |
+| delegation_set_id | The ID of the reusable delegation set whose NS records you want to assign to the hosted zone. Conflicts with vpc as delegation sets can only be used for public zones. | string | `` | no |
 | delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | string | `-` | no |
+| domain_name | This is the name of the resource. | string | - | yes |
+| enabled | Whether to create Route53 vpc association. | bool | `false` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | string | `` | no |
-| fifo_queue | Boolean designating a FIFO queue. | bool | `false` | no |
-| kms_data_key_reuse_period_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). | number | `300` | no |
-| kms_master_key_id | The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. | string | `` | no |
+| failover_enabled | Whether to create Route53 record set. | bool | `false` | no |
+| failover_routing_policies | A block indicating the routing behavior when associated health check fails. Conflicts with any other routing policy. Documented below. | string | `` | no |
+| force_destroy | Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone. | bool | `true` | no |
+| geolocation_enabled | Whether to create Route53 record set. | bool | `false` | no |
+| geolocation_routing_policies | A block indicating a routing policy based on the geolocation of the requestor. Conflicts with any other routing policy. Documented below. | string | `` | no |
+| health_check_id | The health check the record should be associated with. | string | `` | no |
 | label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
-| max_message_size | The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). | number | `262144` | no |
-| message_retention_seconds | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | number | `345600` | no |
+| latency_enabled | Whether to create Route53 record set. | bool | `false` | no |
+| latency_routing_policies | A block indicating a routing policy based on the latency between the requestor and an AWS region. Conflicts with any other routing policy. Documented below. | string | `` | no |
+| multivalue_answer_routing_policy | Set to true to indicate a multivalue answer routing policy. Conflicts with any other routing policy. | string | `` | no |
 | name | Name  (e.g. `app` or `cluster`). | string | `` | no |
-| policy | The JSON policy for the SQS queue. | string | `` | no |
-| receive_wait_time_seconds | The time for which a ReceiveMessage call will wait for a message to arrive (long polling) before returning. An integer from 0 to 20 (seconds). | number | `0` | no |
-| redrive_policy | The JSON policy to set up the Dead Letter Queue, see AWS docs. Note: when specifying maxReceiveCount, you must specify it as an integer (5), and not a string ("5"). | string | `` | no |
+| private_enabled | Whether to create private Route53 zone. | bool | `false` | no |
+| public_enabled | Whether to create public Route53 zone. | bool | `false` | no |
+| record_enabled | Whether to create Route53 record set. | bool | `false` | no |
+| records | (Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add "" inside the Terraform configuration string (e.g. "first255characters""morecharacters"). | string | `` | no |
+| secondary_vpc_id | The VPC to associate with the private hosted zone. | string | `` | no |
+| secondary_vpc_region | The VPC's region. Defaults to the region of the AWS provider. | string | `` | no |
+| set_identifier | Unique identifier to differentiate records with routing policies from one another. Required if using failover, geolocation, latency, or weighted routing policies documented below. | string | `` | no |
 | tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map | `<map>` | no |
-| visibility_timeout_seconds | The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). | number | `30` | no |
+| ttl | (Required for non-alias records) The TTL of the record. | string | `` | no |
+| type | The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. | string | `` | no |
+| vpc_id | VPC ID. | string | `` | no |
+| weighted_enabled | Whether to create Route53 record set. | bool | `false` | no |
+| weighted_routing_policies | A block indicating a weighted routing policy. Conflicts with any other routing policy. Documented below. | string | `` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| arn | The ARN of the SQS queue. |
-| id | The URL for the created Amazon SQS queue. |
 | tags | A mapping of tags to assign to the resource. |
+| zone_id | The Hosted Zone ID. This can be referenced by zone records. |
+
 
 
 
 ## Testing
-
 In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system.
 
 You need to run the following command in the testing folder:
@@ -157,9 +180,9 @@ You need to run the following command in the testing folder:
 
 
 ## Feedback
-If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-sqs/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
+If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-route53/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
-If you have found it worth your time, go ahead and give us a * on [our GitHub](https://github.com/clouddrove/terraform-aws-sqs)!
+If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-route53)!
 
 ## About us
 

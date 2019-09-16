@@ -1,5 +1,5 @@
 // Managed By : CloudDrove
-// Description : This Terratest is used to test the Terraform SQS module.
+// Description : This Terratest is used to test the Terraform Route53 module.
 // Copyright @ CloudDrove. All Right Reserved.
 package test
 
@@ -15,7 +15,7 @@ func Test(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// Source path of Terraform directory.
-		TerraformDir: "../../_example/fifo",
+		TerraformDir: "../../_example/private-hostzone",
 		Upgrade: true,
 	}
 
@@ -26,10 +26,10 @@ func Test(t *testing.T) {
 	defer terraform.Destroy(t, terraformOptions)
 
 	// To get the value of an output variable, run 'terraform output'
-	Arn := strings.Join(terraform.OutputList(t, terraformOptions, "arn"),"")
 	Tags := terraform.OutputMap(t, terraformOptions, "tags")
+	Id := strings.Join(terraform.OutputList(t, terraformOptions, "id"),"")
 
 	// Check that we get back the outputs that we expect
-	assert.Equal(t, "test-sqs-fifo-clouddrove", Tags["Name"])
-	assert.Contains(t, Arn, "arn:aws:sqs")
+	assert.Equal(t, "test-route53-clouddrove", Tags["Name"])
+	assert.Contains(t, Id, "Z")
 }
