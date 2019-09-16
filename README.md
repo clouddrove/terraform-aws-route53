@@ -72,7 +72,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### Public Hostzone
 ```hcl
   module "route53" {
-    source         = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+    source         = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
     name           = "route53"
     application    = "clouddrove"
     environment    = "test"
@@ -88,7 +88,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### Private Hostzone
 ```hcl
   module "route53" {
-    source          = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+    source          = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
     name            = "route53"
     application     = "clouddrove"
     environment     = "test"
@@ -101,7 +101,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### Vpc Association
 ```hcl
   module "route53" {
-    source               = "git::https://github.com/clouddrove/terraform-aws-route53.git"
+    source               = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
     name                 = "route53"
     application          = "clouddrove"
     environment          = "test"
