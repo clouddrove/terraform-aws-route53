@@ -1,0 +1,77 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name : Terraform AWS SQS
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-aws-sqs
+
+# Badges to display
+badges:
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v0.12-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-MIT-blue.svg"
+    url: "LICENSE.md"
+
+#  description of this project
+description: |-
+  Terraform module to create SQS resource on AWS for managing queue.
+
+# extra content
+# please not remove these two If you need add more
+include:
+  - "terraform.md"
+
+# How to use this project
+usage : |-
+  Here are some examples of how you can use this module in your inventory structure:
+  ### FIFO Queue
+  ```hcl
+    module "sqs" {
+      source                      = "git::https://github.com/clouddrove/terraform-aws-sqs.git"
+      name                        = "sqs-fifo"
+      application                 = "clouddrove"
+      environment                 = "test"
+      label_order                 = ["environment", "name", "application"]
+      fifo_queue                  = true
+      content_based_deduplication = true
+    }
+  ```
+  ### Standard Queue
+  ```hcl
+    module "sqs" {
+      source                    = "git::https://github.com/clouddrove/terraform-aws-sqs.git"
+      name                      = "sqs"
+      application               = "clouddrove"
+      environment               = "test"
+      label_order               = ["environment", "name", "application"]
+      delay_seconds             = 90
+      max_message_size          = 2048
+      message_retention_seconds = 86400
+      receive_wait_time_seconds = 10
+      policy                    = data.aws_iam_policy_document.document.json
+    }
+
+    data "aws_iam_policy_document" "document" {
+      version = "2012-10-17"
+      statement {
+        sid    = "First"
+        effect = "Allow"
+        principals {
+          type        = "AWS"
+          identifiers = ["*"]
+        }
+        actions   = ["sqs:SendMessage"]
+        resources = ["arn:aws:sqs:eu-west-1:xxxxxxxxx:test-sqs-clouddrove"]
+      }
+    }
+  ```
