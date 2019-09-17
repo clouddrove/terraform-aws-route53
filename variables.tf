@@ -196,3 +196,9 @@ variable "secondary_vpc_region" {
   default     = ""
   description = "The VPC's region. Defaults to the region of the AWS provider."
 }
+
+variable "zone_id" {
+  type        = string
+  default     = ""
+  description = "Zone ID."
+}

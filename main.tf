@@ -46,7 +46,7 @@ resource "aws_route53_zone" "public" {
 # Description : Terraform module to create Route53 record sets resource on AWS.
 resource "aws_route53_record" "default" {
   count                            = var.record_enabled ? 1 : 0
-  zone_id                          = var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0]
+  zone_id                          = var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])
   name                             = var.domain_name
   type                             = var.type
   ttl                              = var.ttl
