@@ -10,11 +10,26 @@ module "route53" {
   environment    = "test"
   label_order    = ["environment", "name", "application"]
   public_enabled = true
-  record_enabled = true
 
   domain_name = "clouddrove.com"
 
-  type    = "A"
-  ttl     = 30
-  records = ["10.0.0.27"]
+  names = [
+    "www.",
+    "admin."
+  ]
+  types = [
+    "A",
+    "CNAME"
+  ]
+  alias = {
+    names = [
+      "d130easdflja734js.cloudfront.net"
+    ]
+    zone_ids = [
+      "Z2FDRFHATA1ER4"
+    ]
+    evaluate_target_healths = [
+      false
+    ]
+  }
 }

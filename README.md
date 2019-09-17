@@ -78,11 +78,26 @@ Here are some examples of how you can use this module in your inventory structur
     environment    = "test"
     label_order    = ["environment", "name", "application"]
     public_enabled = true
-    record_enabled = true
     domain_name    = "clouddrove.com"
-    type           = "A"
-    ttl            = 30
-    records        = ["10.0.0.27"]
+    names          = [
+                      "www.",
+                      "admin."
+                    ]
+    types          = [
+                      "A",
+                      "CNAME"
+                    ]
+    alias          = {
+                      names = [
+                        "d130easdflja734js.cloudfront.net"
+                      ]
+                      zone_ids = [
+                        "Z2FDRFHATA1ER4"
+                      ]
+                      evaluate_target_healths = [
+                        false
+                      ]
+                    }
   }
 ```
 ### Private Hostzone
@@ -96,6 +111,22 @@ Here are some examples of how you can use this module in your inventory structur
     private_enabled = true
     domain_name     = "clouddrove.com"
     vpc_id          = "vpc-xxxxxxxxxxxxx"
+    names           = [
+                      "www.",
+                      "admin."
+                     ]
+    types           = [
+                      "A",
+                      "CNAME"
+                     ]
+    ttls            = [
+                      "3600",
+                      "3600",
+                     ]
+    values          = [
+                      "10.0.0.27",
+                      "mydomain.com",
+                     ]
   }
 ```
 ### Vpc Association
@@ -124,8 +155,8 @@ Here are some examples of how you can use this module in your inventory structur
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alias | An alias block. Conflicts with ttl & records. Alias record documented below. | string | `` | no |
-| allow_overwrite | Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments. | bool | `false` | no |
+| alias | An alias block. Conflicts with ttl & records. Alias record documented below. | list | `<list>` | no |
+| allow_overwrites | Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments. | list | `<list>` | no |
 | application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
 | attributes | Additional attributes (e.g. `1`). | list | `<list>` | no |
 | comment | A comment for the hosted zone. Defaults to 'Managed by Terraform'. | string | `` | no |
@@ -139,25 +170,27 @@ Here are some examples of how you can use this module in your inventory structur
 | force_destroy | Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone. | bool | `true` | no |
 | geolocation_enabled | Whether to create Route53 record set. | bool | `false` | no |
 | geolocation_routing_policies | A block indicating a routing policy based on the geolocation of the requestor. Conflicts with any other routing policy. Documented below. | string | `` | no |
-| health_check_id | The health check the record should be associated with. | string | `` | no |
+| health_check_ids | The health check the record should be associated with. | list | `<list>` | no |
 | label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
 | latency_enabled | Whether to create Route53 record set. | bool | `false` | no |
 | latency_routing_policies | A block indicating a routing policy based on the latency between the requestor and an AWS region. Conflicts with any other routing policy. Documented below. | string | `` | no |
-| multivalue_answer_routing_policy | Set to true to indicate a multivalue answer routing policy. Conflicts with any other routing policy. | string | `` | no |
+| multivalue_answer_routing_policies | Set to true to indicate a multivalue answer routing policy. Conflicts with any other routing policy. | list | `<list>` | no |
 | name | Name  (e.g. `app` or `cluster`). | string | `` | no |
+| names | The name of the record. | list | `<list>` | no |
 | private_enabled | Whether to create private Route53 zone. | bool | `false` | no |
 | public_enabled | Whether to create public Route53 zone. | bool | `false` | no |
 | record_enabled | Whether to create Route53 record set. | bool | `false` | no |
-| records | (Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add "" inside the Terraform configuration string (e.g. "first255characters""morecharacters"). | string | `` | no |
 | secondary_vpc_id | The VPC to associate with the private hosted zone. | string | `` | no |
 | secondary_vpc_region | The VPC's region. Defaults to the region of the AWS provider. | string | `` | no |
-| set_identifier | Unique identifier to differentiate records with routing policies from one another. Required if using failover, geolocation, latency, or weighted routing policies documented below. | string | `` | no |
+| set_identifiers | Unique identifier to differentiate records with routing policies from one another. Required if using failover, geolocation, latency, or weighted routing policies documented below. | list | `<list>` | no |
 | tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map | `<map>` | no |
-| ttl | (Required for non-alias records) The TTL of the record. | string | `` | no |
-| type | The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. | string | `` | no |
+| ttls | (Required for non-alias records) The TTL of the record. | list | `<list>` | no |
+| types | The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. | list | `<list>` | no |
+| values | (Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add "" inside the Terraform configuration string (e.g. "first255characters""morecharacters"). | list | `<list>` | no |
 | vpc_id | VPC ID. | string | `` | no |
 | weighted_enabled | Whether to create Route53 record set. | bool | `false` | no |
 | weighted_routing_policies | A block indicating a weighted routing policy. Conflicts with any other routing policy. Documented below. | string | `` | no |
+| zone_id | Zone ID. | string | `` | no |
 
 ## Outputs
 

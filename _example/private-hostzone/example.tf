@@ -13,4 +13,21 @@ module "route53" {
 
   domain_name = "clouddrove.com"
   vpc_id      = "vpc-xxxxxxxxxxxx"
+
+  names = [
+    "www.",
+    "admin."
+  ]
+  types = [
+    "A",
+    "CNAME"
+  ]
+  ttls = [
+    "3600",
+    "3600",
+  ]
+  values = [
+    "10.0.0.27",
+    "mydomain.com",
+  ]
 }
