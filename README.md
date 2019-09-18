@@ -69,7 +69,7 @@ This module has a few dependencies:
 
 
 Here are some examples of how you can use this module in your inventory structure:
-### Public Hostzone
+### Public Hostedzone
 ```hcl
   module "route53" {
     source         = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
@@ -100,7 +100,7 @@ Here are some examples of how you can use this module in your inventory structur
                     }
   }
 ```
-### Private Hostzone
+### Private Hostedzone
 ```hcl
   module "route53" {
     source          = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"

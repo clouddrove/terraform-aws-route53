@@ -69,9 +69,9 @@ resource "aws_route53_record" "alias" {
   multivalue_answer_routing_policy = length(var.multivalue_answer_routing_policies) > 0 ? element(var.multivalue_answer_routing_policies, count.index) : null
   allow_overwrite                  = length(var.allow_overwrites) > 0 ? element(var.allow_overwrites, count.index) : false
   alias {
-    name                   = element(var.alias["names"], count.index)
-    zone_id                = element(var.alias["zone_ids"], count.index)
-    evaluate_target_health = element(var.alias["evaluate_target_healths"], count.index)
+    name                   = length(var.alias) > 0 ? element(var.alias["names"], count.index) : ""
+    zone_id                = length(var.alias) > 0 ? element(var.alias["zone_ids"], count.index) : ""
+    evaluate_target_health = length(var.alias) > 0 ? element(var.alias["evaluate_target_healths"], count.index) : false
   }
 }
 
