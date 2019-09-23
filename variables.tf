@@ -50,6 +50,12 @@ variable "private_enabled" {
   description = "Whether to create private Route53 zone."
 }
 
+variable "record_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create Route53 record set."
+}
+
 variable "public_enabled" {
   type        = bool
   default     = false

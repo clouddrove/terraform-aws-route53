@@ -78,6 +78,7 @@ Here are some examples of how you can use this module in your inventory structur
     environment    = "test"
     label_order    = ["environment", "name", "application"]
     public_enabled = true
+    record_enabled = true
     domain_name    = "clouddrove.com"
     names          = [
                       "www.",
@@ -109,6 +110,7 @@ Here are some examples of how you can use this module in your inventory structur
     environment     = "test"
     label_order     = ["environment", "name", "application"]
     private_enabled = true
+    record_enabled  = true
     domain_name     = "clouddrove.com"
     vpc_id          = "vpc-xxxxxxxxxxxxx"
     names           = [
@@ -179,6 +181,7 @@ Here are some examples of how you can use this module in your inventory structur
 | names | The name of the record. | list | `<list>` | no |
 | private_enabled | Whether to create private Route53 zone. | bool | `false` | no |
 | public_enabled | Whether to create public Route53 zone. | bool | `false` | no |
+| record_enabled | Whether to create Route53 record set. | bool | `false` | no |
 | record_enabled | Whether to create Route53 record set. | bool | `false` | no |
 | secondary_vpc_id | The VPC to associate with the private hosted zone. | string | `` | no |
 | secondary_vpc_region | The VPC's region. Defaults to the region of the AWS provider. | string | `` | no |

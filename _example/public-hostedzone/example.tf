@@ -10,6 +10,7 @@ module "route53" {
   environment    = "test"
   label_order    = ["environment", "name", "application"]
   public_enabled = true
+  record_enabled = true
 
   domain_name = "clouddrove.com"
 
