@@ -33,7 +33,7 @@ resource "aws_route53_zone" "private" {
 # Description : Terraform module to create Route53 zone resource on AWS for creating public
 #               hosted zones.
 resource "aws_route53_zone" "public" {
-  count = var.public_enabled ? 1 : 0
+  count = var.public_enabled ? 1 : 0table
 
   name              = var.domain_name
   delegation_set_id = var.delegation_set_id
@@ -60,7 +60,7 @@ resource "aws_route53_record" "default" {
 # Module      : Route53 Record Set
 # Description : Terraform module to create Route53 record sets resource on AWS.
 resource "aws_route53_record" "alias" {
-  count                            = var.record_enabled && length(var.alias) > 0 ? length(var.alias) : 0
+  count                            = var.record_enabled && length(var.alias["names"]) > 0 ? length(var.alias["names"]) : 0
   zone_id                          = var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])
   name                             = element(var.names, count.index)
   type                             = element(var.types, count.index)
