@@ -33,7 +33,7 @@ resource "aws_route53_zone" "private" {
 # Description : Terraform module to create Route53 zone resource on AWS for creating public
 #               hosted zones.
 resource "aws_route53_zone" "public" {
-  count = var.public_enabled ? 1 : 0table
+  count = var.public_enabled ? 1 : 0
 
   name              = var.domain_name
   delegation_set_id = var.delegation_set_id
