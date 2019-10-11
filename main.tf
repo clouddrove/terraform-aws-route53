@@ -60,8 +60,8 @@ resource "aws_route53_record" "default" {
 # Module      : Route53 Record Set
 # Description : Terraform module to create Route53 record sets resource on AWS.
 resource "aws_route53_record" "alias" {
-  count                            = var.record_enabled && length(var.alias["names"]) > 0 ? length(var.alias["names"]) : 0
-  zone_id                          = var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])
+  count                            = var.record_enabled && length(var.alias) > 0 && length(var.alias["names"]) > 0 ? length(var.alias["names"]) : 0
+  zone_id                          = var.zone_id
   name                             = element(var.names, count.index)
   type                             = element(var.types, count.index)
   set_identifier                   = length(var.set_identifiers) > 0 ? element(var.set_identifiers, count.index) : ""
