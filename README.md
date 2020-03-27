@@ -7,7 +7,7 @@
     Terraform AWS Route53
 </h1>
 
-<p align="center" style="font-size: 1.2rem;">
+<p align="center" style="font-size: 1.2rem;"> 
     Terraform module to create Route53 resource on AWS for zone and record set.
      </p>
 
@@ -38,7 +38,7 @@
 <hr>
 
 
-We eat, drink, sleep and most importantly love **DevOps**. We are working towards stratergies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure.
+We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure. 
 
 This module is basically combination of [Terraform open source](https://www.terraform.io/) and includes automatation tests and examples. It also helps to create and improve your infrastructure with minimalistic code instead of maintaining the whole infrastructure code yourself.
 
@@ -49,7 +49,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 ## Prerequisites
 
-This module has a few dependencies:
+This module has a few dependencies: 
 
 - [Terraform 0.12](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
@@ -72,7 +72,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### Public Hostedzone
 ```hcl
   module "route53" {
-    source         = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+    source         = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.1"
     name           = "route53"
     application    = "clouddrove"
     environment    = "test"
@@ -104,7 +104,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### Private Hostedzone
 ```hcl
   module "route53" {
-    source          = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+    source          = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.1"
     name            = "route53"
     application     = "clouddrove"
     environment     = "test"
@@ -134,7 +134,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### Vpc Association
 ```hcl
   module "route53" {
-    source               = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+    source               = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.1"
     name                 = "route53"
     application          = "clouddrove"
     environment          = "test"
@@ -157,56 +157,57 @@ Here are some examples of how you can use this module in your inventory structur
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| alias | An alias block. Conflicts with ttl & records. Alias record documented below. | list | `<list>` | no |
-| allow_overwrites | Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments. | list | `<list>` | no |
-| application | Application (e.g. `cd` or `clouddrove`). | string | `` | no |
-| attributes | Additional attributes (e.g. `1`). | list | `<list>` | no |
-| comment | A comment for the hosted zone. Defaults to 'Managed by Terraform'. | string | `` | no |
-| delegation_set_id | The ID of the reusable delegation set whose NS records you want to assign to the hosted zone. Conflicts with vpc as delegation sets can only be used for public zones. | string | `` | no |
-| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | string | `-` | no |
-| domain_name | This is the name of the resource. | string | - | yes |
-| enabled | Whether to create Route53 vpc association. | bool | `false` | no |
-| environment | Environment (e.g. `prod`, `dev`, `staging`). | string | `` | no |
-| failover_enabled | Whether to create Route53 record set. | bool | `false` | no |
-| failover_routing_policies | A block indicating the routing behavior when associated health check fails. Conflicts with any other routing policy. Documented below. | string | `` | no |
-| force_destroy | Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone. | bool | `true` | no |
-| geolocation_enabled | Whether to create Route53 record set. | bool | `false` | no |
-| geolocation_routing_policies | A block indicating a routing policy based on the geolocation of the requestor. Conflicts with any other routing policy. Documented below. | string | `` | no |
-| health_check_ids | The health check the record should be associated with. | list | `<list>` | no |
-| label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
-| latency_enabled | Whether to create Route53 record set. | bool | `false` | no |
-| latency_routing_policies | A block indicating a routing policy based on the latency between the requestor and an AWS region. Conflicts with any other routing policy. Documented below. | string | `` | no |
-| multivalue_answer_routing_policies | Set to true to indicate a multivalue answer routing policy. Conflicts with any other routing policy. | list | `<list>` | no |
-| name | Name  (e.g. `app` or `cluster`). | string | `` | no |
+| alias | An alias block. Conflicts with ttl & records. Alias record documented below. | map | `<map>` | no |
+| allow\_overwrites | Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments. | list | `<list>` | no |
+| application | Application \(e.g. `cd` or `clouddrove`\). | string | `""` | no |
+| attributes | Additional attributes \(e.g. `1`\). | list | `<list>` | no |
+| comment | A comment for the hosted zone. Defaults to 'Managed by Terraform'. | string | `""` | no |
+| delegation\_set\_id | The ID of the reusable delegation set whose NS records you want to assign to the hosted zone. Conflicts with vpc as delegation sets can only be used for public zones. | string | `""` | no |
+| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | string | `"-"` | no |
+| domain\_name | This is the name of the resource. | string | n/a | yes |
+| enabled | Whether to create Route53 vpc association. | bool | `"false"` | no |
+| environment | Environment \(e.g. `prod`, `dev`, `staging`\). | string | `""` | no |
+| failover\_enabled | Whether to create Route53 record set. | bool | `"false"` | no |
+| failover\_routing\_policies | A block indicating the routing behavior when associated health check fails. Conflicts with any other routing policy. Documented below. | string | `""` | no |
+| force\_destroy | Whether to destroy all records \(possibly managed outside of Terraform\) in the zone when destroying the zone. | bool | `"true"` | no |
+| geolocation\_enabled | Whether to create Route53 record set. | bool | `"false"` | no |
+| geolocation\_routing\_policies | A block indicating a routing policy based on the geolocation of the requestor. Conflicts with any other routing policy. Documented below. | string | `""` | no |
+| health\_check\_ids | The health check the record should be associated with. | list | `<list>` | no |
+| label\_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
+| latency\_enabled | Whether to create Route53 record set. | bool | `"false"` | no |
+| latency\_routing\_policies | A block indicating a routing policy based on the latency between the requestor and an AWS region. Conflicts with any other routing policy. Documented below. | string | `""` | no |
+| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | string | `"anmol@clouddrove.com"` | no |
+| multivalue\_answer\_routing\_policies | Set to true to indicate a multivalue answer routing policy. Conflicts with any other routing policy. | list | `<list>` | no |
+| name | Name  \(e.g. `app` or `cluster`\). | string | `""` | no |
 | names | The name of the record. | list | `<list>` | no |
-| private_enabled | Whether to create private Route53 zone. | bool | `false` | no |
-| public_enabled | Whether to create public Route53 zone. | bool | `false` | no |
-| record_enabled | Whether to create Route53 record set. | bool | `false` | no |
-| record_set_enabled | Whether to create seperate Route53 record set. | bool | `false` | no |
-| secondary_vpc_id | The VPC to associate with the private hosted zone. | string | `` | no |
-| secondary_vpc_region | The VPC's region. Defaults to the region of the AWS provider. | string | `` | no |
-| set_identifiers | Unique identifier to differentiate records with routing policies from one another. Required if using failover, geolocation, latency, or weighted routing policies documented below. | list | `<list>` | no |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map | `<map>` | no |
-| ttls | (Required for non-alias records) The TTL of the record. | list | `<list>` | no |
+| private\_enabled | Whether to create private Route53 zone. | bool | `"false"` | no |
+| public\_enabled | Whether to create public Route53 zone. | bool | `"false"` | no |
+| record\_enabled | Whether to create Route53 record set. | bool | `"false"` | no |
+| record\_set\_enabled | Whether to create seperate Route53 record set. | bool | `"false"` | no |
+| secondary\_vpc\_id | The VPC to associate with the private hosted zone. | string | `""` | no |
+| secondary\_vpc\_region | The VPC's region. Defaults to the region of the AWS provider. | string | `""` | no |
+| set\_identifiers | Unique identifier to differentiate records with routing policies from one another. Required if using failover, geolocation, latency, or weighted routing policies documented below. | list | `<list>` | no |
+| tags | Additional tags \(e.g. map\(`BusinessUnit`,`XYZ`\). | map | `<map>` | no |
+| ttls | \(Required for non-alias records\) The TTL of the record. | list | `<list>` | no |
 | types | The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. | list | `<list>` | no |
-| values | (Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add "" inside the Terraform configuration string (e.g. "first255characters""morecharacters"). | list | `<list>` | no |
-| vpc_id | VPC ID. | string | `` | no |
-| weighted_enabled | Whether to create Route53 record set. | bool | `false` | no |
-| weighted_routing_policies | A block indicating a weighted routing policy. Conflicts with any other routing policy. Documented below. | string | `` | no |
-| zone_id | Zone ID. | string | `` | no |
+| values | \(Required for non-alias records\) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add "" inside the Terraform configuration string \(e.g. "first255characters""morecharacters"\). | list | `<list>` | no |
+| vpc\_id | VPC ID. | string | `""` | no |
+| weighted\_enabled | Whether to create Route53 record set. | bool | `"false"` | no |
+| weighted\_routing\_policies | A block indicating a weighted routing policy. Conflicts with any other routing policy. Documented below. | string | `""` | no |
+| zone\_id | Zone ID. | string | `""` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
 | tags | A mapping of tags to assign to the resource. |
-| zone_id | The Hosted Zone ID. This can be referenced by zone records. |
+| zone\_id | The Hosted Zone ID. This can be referenced by zone records. |
 
 
 
 
 ## Testing
-In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system.
+In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system. 
 
 You need to run the following command in the testing folder:
 ```hcl
@@ -215,7 +216,7 @@ You need to run the following command in the testing folder:
 
 
 
-## Feedback
+## Feedback 
 If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-route53/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
 If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-route53)!

@@ -30,6 +30,12 @@ variable "attributes" {
   description = "Additional attributes (e.g. `1`)."
 }
 
+variable "managedby" {
+  type        = string
+  default     = "anmol@clouddrove.com"
+  description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
+}
+
 variable "delimiter" {
   type        = string
   default     = "-"
