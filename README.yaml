@@ -37,7 +37,7 @@ usage : |-
   ### Public Hostedzone
   ```hcl
     module "route53" {
-      source         = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+      source         = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.1"
       name           = "route53"
       application    = "clouddrove"
       environment    = "test"
@@ -69,7 +69,7 @@ usage : |-
   ### Private Hostedzone
   ```hcl
     module "route53" {
-      source          = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+      source          = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.1"
       name            = "route53"
       application     = "clouddrove"
       environment     = "test"
@@ -99,7 +99,7 @@ usage : |-
   ### Vpc Association
   ```hcl
     module "route53" {
-      source               = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+      source               = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.1"
       name                 = "route53"
       application          = "clouddrove"
       environment          = "test"

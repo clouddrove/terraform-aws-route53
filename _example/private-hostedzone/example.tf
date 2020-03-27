@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "route53" {
-  source = "git::https://github.com/clouddrove/terraform-aws-route53.git?ref=tags/0.12.0"
+  source = "../../"
 
   name            = "route53"
   application     = "clouddrove"
