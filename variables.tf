@@ -165,7 +165,7 @@ variable "health_check_ids" {
 
 variable "alias" {
   type        = map
-  default     = {"names"=[],"zone_ids"=[],"evaluate_target_healths"=[]}
+  default     = { "names" = [], "zone_ids" = [], "evaluate_target_healths" = [] }
   description = "An alias block. Conflicts with ttl & records. Alias record documented below."
 }
 
