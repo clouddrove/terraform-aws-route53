@@ -5,7 +5,7 @@
 #
 
 # Name of this project
-name : Terraform AWS Route53
+name: Terraform AWS Route53
 
 # License of this project
 license: "MIT"
@@ -23,6 +23,7 @@ badges:
     url: "LICENSE.md"
 
 #  description of this project
+# yamllint disable rule:line-length
 description: |-
   Terraform module to create Route53 resource on AWS for zone and record set.
 
@@ -32,7 +33,8 @@ include:
   - "terraform.md"
 
 # How to use this project
-usage : |-
+# yamllint disable rule:line-length
+usage: |-
   Here are some examples of how you can use this module in your inventory structure:
   ### Public Hostedzone
   ```hcl
