@@ -5,60 +5,137 @@ on:
       - master
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  fmt:
+    name: 'terraform fmt'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@master
+        uses: actions/checkout@v2.3.4
 
-      - name: Configure AWS Credentials
+      - name: 'Terraform Format'
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'fmt'
+      - name: 'Terraform Format'
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'fmt'
+
+  private-hostedzone:
+    name: 'private-hostedzone'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Configure AWS Credentials'
         uses: clouddrove/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
           aws-region: us-east-2
 
-      - name: 'Terraform Format'
-        uses: 'clouddrove/github-actions@v4.0'
-        with:
-          actions_subcommand: 'fmt'
-
-      - name: 'Terraform init private-hostedzone'
-        uses: 'clouddrove/github-actions@v4.0'
+      - name: 'Terraform init for private-hostedzone'
+        uses: 'clouddrove/github-actions@v8.0'
         with:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example/private-hostedzone
 
-      - name: 'Terraform validate private-hostedzone'
-        uses: 'clouddrove/github-actions@v4.0'
+      - name: 'Terraform validate for private-hostedzone'
+        uses: 'clouddrove/github-actions@v8.0'
         with:
-          actions_subcommand: 'validate'
+          actions_subcommand: 'validate for private-hostedzone'
           tf_actions_working_dir: ./_example/private-hostedzone
 
-      - name: 'Terraform init vpc-association'
-        uses: 'clouddrove/github-actions@v4.0'
+      - name: 'Terraform plan for private-hostedzone'
+        uses: 'clouddrove/github-actions@v8.0'
         with:
-          actions_subcommand: 'init'
-          tf_actions_working_dir: ./_example/vpc-association
+          actions_subcommand: 'plan'
+          tf_actions_working_dir: ./_example/private-hostedzone
 
-      - name: 'Terraform validate vpc-association'
-        uses: 'clouddrove/github-actions@v4.0'
+  public-hostedzone:
+    name: 'public-hostedzone'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Configure AWS Credentials'
+        uses: clouddrove/configure-aws-credentials@v1
         with:
-          actions_subcommand: 'validate'
-          tf_actions_working_dir: ./_example/vpc-association
+          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
+          aws-region: us-east-2
 
-      - name: 'Terraform init public-hostedzone'
-        uses: 'clouddrove/github-actions@v4.0'
+      - name: 'Terraform init for public-hostedzone'
+        uses: 'clouddrove/github-actions@v8.0'
         with:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example/public-hostedzone
 
-      - name: 'Terraform validate public-hostedzone'
-        uses: 'clouddrove/github-actions@v4.0'
+      - name: 'Terraform validate for public-hostedzone'
+        uses: 'clouddrove/github-actions@v8.0'
         with:
           actions_subcommand: 'validate'
           tf_actions_working_dir: ./_example/public-hostedzone
+
+      - name: 'Terraform plan for public-hostedzone'
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'plan'
+          tf_actions_working_dir: ./_example/public-hostedzone
+
+  vpc-association:
+    name: 'vpc-association'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Configure AWS Credentials'
+        uses: clouddrove/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
+          aws-region: us-east-2
+
+      - name: 'Terraform init for vpc-association'
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'init'
+          tf_actions_working_dir: ./_example/vpc-association
+
+      - name: 'Terraform validate for vpc-association'
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'validate'
+          tf_actions_working_dir: ./_example/vpc-association
+
+      - name: 'Terraform plan for vpc-association'
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'plan'
+          tf_actions_working_dir: ./_example/vpc-association
+
+  pre-commit:
+    name: 'Pre-Commit'
+    needs:
+      - fmt
+      - private-hostedzone
+      - public-hostedzone
+      - vpc-association
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Install Tflint'
+        run: |
+          curl https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      - name: 'Pre-Commit 🔎'
+        uses: pre-commit/action@v2.0.3
+        continue-on-error: true
 
       - name: 'Slack Notification'
         uses: clouddrove/action-slack@v2

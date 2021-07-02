@@ -6,9 +6,8 @@ module "route53" {
   source = "../../"
 
   name            = "route53"
-  application     = "clouddrove"
   environment     = "test"
-  label_order     = ["environment", "name", "application"]
+  label_order     = ["environment", "name"]
   private_enabled = true
   enabled         = true
 
