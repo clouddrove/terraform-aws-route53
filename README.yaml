@@ -46,7 +46,7 @@ usage: |-
   ```hcl
     module "route53" {
       source        = "clouddrove/route53/aws"
-      version       = "0.15.0"
+      version       = "1.0.1"
       name           = "route53"
       application    = "clouddrove"
       environment    = "test"
@@ -79,7 +79,7 @@ usage: |-
   ```hcl
     module "route53" {
       source        = "clouddrove/route53/aws"
-      version       = "0.15.0"
+      version       = "1.0.1"
       name            = "route53"
       application     = "clouddrove"
       environment     = "test"
@@ -110,7 +110,7 @@ usage: |-
   ```hcl
     module "route53" {
       source        = "clouddrove/route53/aws"
-      version       = "0.15.0"
+      version       = "1.0.1"
       name                 = "route53"
       application          = "clouddrove"
       environment          = "test"
