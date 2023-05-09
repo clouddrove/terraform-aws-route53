@@ -10,6 +10,14 @@ updates:
     schedule:
       interval: "weekly"
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "_example/" # Location of package manifests
+    directory: "_example/private-hostedzone" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "_example/public-hostedzone" # Location of package manifests
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "terraform" # See documentation for possible values
+    directory: "_example/vpc-association" # Location of package manifests
     schedule:
       interval: "weekly"
