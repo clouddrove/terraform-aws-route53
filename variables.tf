@@ -30,7 +30,6 @@ variable "repository" {
   }
 }
 
-
 variable "label_order" {
   type        = list(any)
   default     = []
@@ -63,11 +62,6 @@ variable "tags" {
 
 # Module      : Route53
 # Description : Terraform Route53 module variables.
-variable "private_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to create private Route53 zone."
-}
 
 variable "record_enabled" {
   type        = bool
@@ -87,28 +81,10 @@ variable "record_set_enabled" {
   description = "Whether to create seperate Route53 record set."
 }
 
-variable "failover_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to create Route53 record set."
-}
-
-variable "latency_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to create Route53 record set."
-}
-
-variable "geolocation_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to create Route53 record set."
-}
-
-variable "weighted_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to create Route53 record set."
+variable "records" {
+  description = "List of objects of DNS records"
+  type        = any
+  default     = []
 }
 
 variable "domain_name" {
@@ -146,40 +122,16 @@ variable "types" {
   description = "The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. "
 }
 
-variable "ttls" {
-  type        = list(any)
-  default     = []
-  description = "(Required for non-alias records) The TTL of the record."
-}
-
-variable "names" {
-  type        = list(any)
-  default     = []
-  description = "The name of the record."
-}
-
 variable "values" {
   type        = list(any)
   default     = []
   description = "(Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \"\" inside the Terraform configuration string (e.g. \"first255characters\"\"morecharacters\")."
 }
 
-variable "set_identifiers" {
-  type        = list(any)
-  default     = []
-  description = "Unique identifier to differentiate records with routing policies from one another. Required if using failover, geolocation, latency, or weighted routing policies documented below."
-}
-
 variable "health_check_ids" {
   type        = list(any)
   default     = []
   description = "The health check the record should be associated with."
-}
-
-variable "alias" {
-  type        = map(any)
-  default     = { "names" = [], "zone_ids" = [], "evaluate_target_healths" = [] }
-  description = "An alias block. Conflicts with ttl & records. Alias record documented below."
 }
 
 variable "failover_routing_policies" {
