@@ -24,9 +24,9 @@ module "route53" {
       }
     },
     {
-      name = "admin"
-      type = "CNAME"
-      ttl  = 3600
+      name    = "admin"
+      type    = "CNAME"
+      ttl     = 3600
       records = ["d130easdflja734js.cloudfront.net"]
     },
   ]

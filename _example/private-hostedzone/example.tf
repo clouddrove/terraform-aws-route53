@@ -16,15 +16,15 @@ module "route53" {
 
   records = [
     {
-      name = "www"
-      type = "A"
-      ttl  = 3600
+      name    = "www"
+      type    = "A"
+      ttl     = 3600
       records = ["10.0.0.27"]
     },
     {
-      name = "admin"
-      type = "CNAME"
-      ttl  = 3600
+      name    = "admin"
+      type    = "CNAME"
+      ttl     = 3600
       records = ["mydomain.com"]
     },
   ]

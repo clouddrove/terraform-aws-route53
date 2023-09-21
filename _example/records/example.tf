@@ -9,13 +9,13 @@ locals {
 module "route53" {
   source = "../../"
 
-  name            = "route53"
-  environment     = "test"
-  label_order     = ["environment", "name"]
-  public_enabled  = false
-  record_enabled  = true
+  name           = "route53"
+  environment    = "test"
+  label_order    = ["environment", "name"]
+  public_enabled = false
+  record_enabled = true
 
-  zone_id     = local.zone_id 
+  zone_id     = local.zone_id
   domain_name = "clouddrove.com"
 
   records = [
@@ -38,8 +38,8 @@ module "route53" {
       }
     },
     {
-      name           = "alias-1"
-      type           = "A"
+      name = "alias-1"
+      type = "A"
       alias = {
         name    = "CHANGEME001" # name of the attached service.
         zone_id = local.zone_id
