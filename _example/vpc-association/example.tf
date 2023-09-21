@@ -15,5 +15,4 @@ module "route53" {
   vpc_id      = "vpc-xxxxxxxxxxxxxx"
 
   secondary_vpc_id     = "vpc-xxxxxxxxxxxxxx"
-  secondary_vpc_region = "eu-west-1"
 }
