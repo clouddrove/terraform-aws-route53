@@ -19,6 +19,7 @@ module "labels" {
   source  = "clouddrove/labels/aws"
   version = "1.3.0"
 
+  enabled     = var.enabled
   name        = var.name
   environment = var.environment
   managedby   = var.managedby
@@ -31,7 +32,7 @@ module "labels" {
 # Description : Terraform module to create Route53 zone resource on AWS for creating private
 #               hosted zones.
 resource "aws_route53_zone" "private" {
-  count = var.private_enabled ? 1 : 0
+  count = var.enabled && var.private_enabled ? 1 : 0
 
   name          = var.domain_name
   comment       = var.comment
@@ -46,7 +47,7 @@ resource "aws_route53_zone" "private" {
 # Description : Terraform module to create Route53 zone resource on AWS for creating public
 #               hosted zones.
 resource "aws_route53_zone" "public" {
-  count = var.public_enabled ? 1 : 0
+  count = var.enabled && var.public_enabled ? 1 : 0
 
   name              = var.domain_name
   delegation_set_id = var.delegation_set_id
@@ -59,7 +60,7 @@ resource "aws_route53_zone" "public" {
 # Description : Terraform module to create Route53 record sets resource on AWS.
 
 resource "aws_route53_record" "this" {
-  for_each = { for k, v in local.recordsets : k => v if var.record_enabled && (local.zone_id != null || var.domain_name != null) }
+  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && (local.zone_id != null || var.domain_name != null) }
 
   zone_id = local.zone_id
 
@@ -121,7 +122,7 @@ resource "aws_route53_record" "this" {
 # Description : Terraform module to create Route53 record sets resource on AWS for Weighted
 #               Routing Policy.
 resource "aws_route53_zone_association" "default" {
-  count   = var.enabled && var.private_enabled ? 1 : 0
+  count   = var.enabled && var.vpc_association_enabled && var.private_enabled ? 1 : 0
   zone_id = aws_route53_zone.private.*.zone_id[0]
   vpc_id  = var.secondary_vpc_id
 }

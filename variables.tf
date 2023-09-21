@@ -6,12 +6,6 @@ variable "name" {
   description = "Name  (e.g. `app` or `cluster`)."
 }
 
-variable "application" {
-  type        = string
-  default     = ""
-  description = "Application (e.g. `cd` or `clouddrove`)."
-}
-
 variable "environment" {
   type        = string
   default     = ""
@@ -36,37 +30,31 @@ variable "label_order" {
   description = "Label order, e.g. `name`,`application`."
 }
 
-variable "attributes" {
-  type        = list(any)
-  default     = []
-  description = "Additional attributes (e.g. `1`)."
-}
-
 variable "managedby" {
   type        = string
   default     = "anmol@clouddrove.com"
   description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
 }
 
-variable "delimiter" {
-  type        = string
-  default     = "-"
-  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`."
-}
-
-variable "tags" {
-  type        = map(any)
-  default     = {}
-  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
-}
-
 # Module      : Route53
 # Description : Terraform Route53 module variables.
+
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Flag to control the Route53 and related resources creation."
+}
 
 variable "record_enabled" {
   type        = bool
   default     = false
   description = "Whether to create Route53 record set."
+}
+
+variable "private_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to create private Route53 zone."
 }
 
 variable "public_enabled" {
@@ -75,16 +63,16 @@ variable "public_enabled" {
   description = "Whether to create public Route53 zone."
 }
 
-variable "record_set_enabled" {
-  type        = bool
-  default     = false
-  description = "Whether to create seperate Route53 record set."
-}
-
 variable "records" {
   description = "List of objects of DNS records"
   type        = any
   default     = []
+}
+
+variable "records_jsonencoded" {
+  description = "List of map of DNS records (stored as jsonencoded string, for terragrunt)"
+  type        = string
+  default     = null
 }
 
 variable "domain_name" {
@@ -116,57 +104,7 @@ variable "vpc_id" {
   description = "VPC ID."
 }
 
-variable "types" {
-  type        = list(any)
-  default     = []
-  description = "The record type. Valid values are A, AAAA, CAA, CNAME, MX, NAPTR, NS, PTR, SOA, SPF, SRV and TXT. "
-}
-
-variable "values" {
-  type        = list(any)
-  default     = []
-  description = "(Required for non-alias records) A string list of records. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \"\" inside the Terraform configuration string (e.g. \"first255characters\"\"morecharacters\")."
-}
-
-variable "health_check_ids" {
-  type        = list(any)
-  default     = []
-  description = "The health check the record should be associated with."
-}
-
-variable "failover_routing_policies" {
-  default     = null
-  description = "A block indicating the routing behavior when associated health check fails. Conflicts with any other routing policy. Documented below."
-}
-
-variable "geolocation_routing_policies" {
-  default     = null
-  description = "A block indicating a routing policy based on the geolocation of the requestor. Conflicts with any other routing policy. Documented below."
-}
-
-variable "latency_routing_policies" {
-  default     = null
-  description = "A block indicating a routing policy based on the latency between the requestor and an AWS region. Conflicts with any other routing policy. Documented below."
-}
-
-variable "weighted_routing_policies" {
-  default     = null
-  description = "A block indicating a weighted routing policy. Conflicts with any other routing policy. Documented below."
-}
-
-variable "multivalue_answer_routing_policies" {
-  type        = list(any)
-  default     = []
-  description = "Set to true to indicate a multivalue answer routing policy. Conflicts with any other routing policy."
-}
-
-variable "allow_overwrites" {
-  type        = list(any)
-  default     = []
-  description = "Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record. false by default. This configuration is not recommended for most environments."
-}
-
-variable "enabled" {
+variable "vpc_association_enabled" {
   type        = bool
   default     = false
   description = "Whether to create Route53 vpc association."
@@ -178,14 +116,8 @@ variable "secondary_vpc_id" {
   description = "The VPC to associate with the private hosted zone."
 }
 
-variable "secondary_vpc_region" {
-  type        = string
-  default     = ""
-  description = "The VPC's region. Defaults to the region of the AWS provider."
-}
-
 variable "zone_id" {
   type        = string
   default     = ""
-  description = "Zone ID."
+  description = "Route53 Zone ID."
 }

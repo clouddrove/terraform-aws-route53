@@ -9,27 +9,25 @@ module "route53" {
   environment    = "test"
   label_order    = ["environment", "name"]
   public_enabled = true
-  record_enabled = true
+  record_enabled = false
 
-  domain_name = "clouddrove.com"
+  domain_name = "tech-tycoons.clouddrove.com"
 
-  names = [
-    "www.",
-    "admin."
+  records = [
+    {
+      name = "www"
+      type = "A"
+      ttl  = 3600
+      alias = {
+        name    = "d130easdflja734js.cloudfront.net" # name of the attached service.
+        zone_id = "Z2XXXXHXTXXXX4"
+      }
+    },
+    {
+      name = "admin"
+      type = "CNAME"
+      ttl  = 3600
+      records = ["d130easdflja734js.cloudfront.net"]
+    },
   ]
-  types = [
-    "A",
-    "CNAME"
-  ]
-  alias = {
-    names = [
-      "d130easdflja734js.cloudfront.net"
-    ]
-    zone_ids = [
-      "Z2FDRFHATA1ER4"
-    ]
-    evaluate_target_healths = [
-      false
-    ]
-  }
 }
