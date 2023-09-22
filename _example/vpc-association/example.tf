@@ -10,6 +10,7 @@ module "route53" {
   environment     = "test"
   label_order     = ["environment", "name"]
   private_enabled = true
+  record_enabled = false
 
   domain_name = "clouddrove.com"
   vpc_id      = "vpc-xxxxxxxxxxxxxx"

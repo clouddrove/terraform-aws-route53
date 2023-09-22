@@ -9,18 +9,17 @@ module "route53" {
   environment    = "test"
   label_order    = ["environment", "name"]
   public_enabled = true
-  record_enabled = false
+  record_enabled = true
 
-  domain_name = "tech-tycoons.clouddrove.com"
+  domain_name = "clouddrove.com"
 
   records = [
     {
       name = "www"
       type = "A"
-      ttl  = 3600
       alias = {
-        name    = "d130easdflja734js.cloudfront.net" # name of the attached service.
-        zone_id = "Z2XXXXHXTXXXX4"
+        name    = "d130easdflja734js.cloudfront.net" # name/DNS of attached cloudfront.
+        zone_id = "Z2XXXXHXTXXXX4" # A valid zone ID of cloudfront you are trying to create alias of.
       }
     },
     {
