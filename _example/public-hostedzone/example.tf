@@ -13,23 +13,20 @@ module "route53" {
 
   domain_name = "clouddrove.com"
 
-  names = [
-    "www.",
-    "admin."
+  records = [
+    {
+      name = "www"
+      type = "A"
+      alias = {
+        name    = "d130easdflja734js.cloudfront.net" # name/DNS of attached cloudfront.
+        zone_id = "Z2XXXXHXTXXXX4" # A valid zone ID of cloudfront you are trying to create alias of.
+      }
+    },
+    {
+      name    = "admin"
+      type    = "CNAME"
+      ttl     = 3600
+      records = ["d130easdflja734js.cloudfront.net"]
+    },
   ]
-  types = [
-    "A",
-    "CNAME"
-  ]
-  alias = {
-    names = [
-      "d130easdflja734js.cloudfront.net"
-    ]
-    zone_ids = [
-      "Z2FDRFHATA1ER4"
-    ]
-    evaluate_target_healths = [
-      false
-    ]
-  }
 }
