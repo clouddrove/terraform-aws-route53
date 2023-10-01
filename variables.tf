@@ -1,5 +1,6 @@
-#Module      : LABEL
-#Description : Terraform label module variables
+##----------------------------------------------------------------------------- 
+## Locals declration to determine count of public subnet, private subnet, and nat gateway. 
+##-----------------------------------------------------------------------------
 variable "name" {
   type        = string
   default     = ""
@@ -36,8 +37,9 @@ variable "managedby" {
   description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
 }
 
-# Module      : Route53
-# Description : Terraform Route53 module variables.
+##----------------------------------------------------------------------------- 
+## Terraform Route53 module variables.
+##-----------------------------------------------------------------------------
 
 variable "enabled" {
   type        = bool
