@@ -63,7 +63,7 @@ resource "aws_route53_zone" "public" {
 ## Terraform module to create Route53 record sets resource on AWS. 
 ##-----------------------------------------------------------------------------
 resource "aws_route53_record" "this" {
-  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && ( var.zone_id != null || var.public_enabled != null || var.private_enabled != null || var.domain_name != null) }
+  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && (var.zone_id != null || var.public_enabled != null || var.private_enabled != null || var.domain_name != null) }
 
   zone_id = local.zone_id
 
@@ -119,8 +119,8 @@ resource "aws_route53_record" "this" {
       subdivision = lookup(each.value.geolocation_routing_policy, "subdivision", null)
     }
   }
-  depends_on = [ 
-    aws_route53_zone.public, 
+  depends_on = [
+    aws_route53_zone.public,
     aws_route53_zone.private
   ]
 }
