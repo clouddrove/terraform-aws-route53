@@ -12,7 +12,7 @@ locals {
   ##   Convert `records` from list to map with unique keys
   ##-----------------------------------------------------------------------------
   recordsets = { for rs in local.records : try(rs.key, join(" ", compact(["${rs.name} ${rs.type}", try(rs.set_identifier, "")]))) => rs }
-  zone_id    = var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])
+  zone_id    = var.enabled ? (var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])) : ""
 }
 
 ##----------------------------------------------------------------------------- 
