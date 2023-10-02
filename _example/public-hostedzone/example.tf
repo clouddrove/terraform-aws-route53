@@ -19,7 +19,7 @@ module "route53" {
       type = "A"
       alias = {
         name    = "d130easdflja734js.cloudfront.net" # name/DNS of attached cloudfront.
-        zone_id = "Z2XXXXHXTXXXX4" # A valid zone ID of cloudfront you are trying to create alias of.
+        zone_id = "Z2XXXXHXTXXXX4"                   # A valid zone ID of cloudfront you are trying to create alias of.
       }
     },
     {

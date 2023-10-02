@@ -12,7 +12,7 @@ locals {
   ##   Convert `records` from list to map with unique keys
   ##-----------------------------------------------------------------------------
   recordsets = { for rs in local.records : try(rs.key, join(" ", compact(["${rs.name} ${rs.type}", try(rs.set_identifier, "")]))) => rs }
-  zone_id    = var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])
+  zone_id    = var.enabled ? (var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private.*.zone_id[0] : aws_route53_zone.public.*.zone_id[0])) : ""
 }
 
 ##----------------------------------------------------------------------------- 
@@ -63,7 +63,7 @@ resource "aws_route53_zone" "public" {
 ## Terraform module to create Route53 record sets resource on AWS. 
 ##-----------------------------------------------------------------------------
 resource "aws_route53_record" "this" {
-  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && ( var.zone_id != null || var.public_enabled != null || var.private_enabled != null || var.domain_name != null) }
+  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && (var.zone_id != null || var.public_enabled != null || var.private_enabled != null || var.domain_name != null) }
 
   zone_id = local.zone_id
 
@@ -119,8 +119,8 @@ resource "aws_route53_record" "this" {
       subdivision = lookup(each.value.geolocation_routing_policy, "subdivision", null)
     }
   }
-  depends_on = [ 
-    aws_route53_zone.public, 
+  depends_on = [
+    aws_route53_zone.public,
     aws_route53_zone.private
   ]
 }
