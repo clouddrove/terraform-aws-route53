@@ -1,5 +1,5 @@
 output "id" {
-  value       = module.route53.*.zone_id
+  value       = module.route53[*].zone_id
   description = "The ID of the Hostzone."
 }
 

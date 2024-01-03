@@ -1,0 +1,23 @@
+name: tf-checks
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  private-hostedzone:
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    with:
+      working_directory: './_example/private-hostedzone/'
+  public-hostedzone:
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    with:
+      working_directory: './_example/public-hostedzone/'
+  records:
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    with:
+      working_directory: './_example/records/'
+  vpc-association:
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    with:
+      working_directory: './_example/vpc-association/'
