@@ -8,5 +8,5 @@ jobs:
     secrets:
       GITHUB: ${{ secrets.GITHUB }}
     with:
-      tfcheck: 'private-hostedzone / Check code format / Get min/max versions'
+      tfcheck: 'private-hostedzone / Check code format'
 ...
