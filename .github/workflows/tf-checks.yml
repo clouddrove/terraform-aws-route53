@@ -6,18 +6,18 @@ on:
   workflow_dispatch:
 jobs:
   private-hostedzone:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/private-hostedzone/'
   public-hostedzone:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/public-hostedzone/'
   records:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/records/'
   vpc-association:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.0.9
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/vpc-association/'
