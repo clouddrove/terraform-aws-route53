@@ -2,21 +2,21 @@
 ## Copyright @ CloudDrove. All Right Reserved.
 
 locals {
-  ##----------------------------------------------------------------------------- 
+  ##-----------------------------------------------------------------------------
   ##   Terragrunt users have to provide `records_jsonencoded` as jsonencode()'d string.
   ##   See details: https://github.com/gruntwork-io/terragrunt/issues/1211
   ##-----------------------------------------------------------------------------
   records = concat(var.records, try(jsondecode(var.records_jsonencoded), []))
 
-  ##----------------------------------------------------------------------------- 
+  ##-----------------------------------------------------------------------------
   ##   Convert `records` from list to map with unique keys
   ##-----------------------------------------------------------------------------
   recordsets = { for rs in local.records : try(rs.key, join(" ", compact(["${rs.name} ${rs.type}", try(rs.set_identifier, "")]))) => rs }
   zone_id    = var.enabled ? (var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private[*].zone_id[0] : aws_route53_zone.public[*].zone_id[0])) : ""
 }
 
-##----------------------------------------------------------------------------- 
-## Locals declration to determine count of public subnet, private subnet, and nat gateway. 
+##-----------------------------------------------------------------------------
+## Locals declration to determine count of public subnet, private subnet, and nat gateway.
 ##-----------------------------------------------------------------------------
 module "labels" {
   source  = "clouddrove/labels/aws"
@@ -31,8 +31,8 @@ module "labels" {
 
 }
 
-##----------------------------------------------------------------------------- 
-## Terraform module to create Route53 zone resource on AWS for creating private hosted zones. 
+##-----------------------------------------------------------------------------
+## Terraform module to create Route53 zone resource on AWS for creating private hosted zones.
 ##-----------------------------------------------------------------------------
 resource "aws_route53_zone" "private" {
   count = var.enabled && var.private_enabled ? 1 : 0
@@ -46,8 +46,8 @@ resource "aws_route53_zone" "private" {
   }
 }
 
-##----------------------------------------------------------------------------- 
-## Terraform module to create Route53 zone resource on AWS for creating public hosted zones. 
+##-----------------------------------------------------------------------------
+## Terraform module to create Route53 zone resource on AWS for creating public hosted zones.
 ##-----------------------------------------------------------------------------
 resource "aws_route53_zone" "public" {
   count = var.enabled && var.public_enabled ? 1 : 0
@@ -59,8 +59,8 @@ resource "aws_route53_zone" "public" {
   tags              = module.labels.tags
 }
 
-##----------------------------------------------------------------------------- 
-## Terraform module to create Route53 record sets resource on AWS. 
+##-----------------------------------------------------------------------------
+## Terraform module to create Route53 record sets resource on AWS.
 ##-----------------------------------------------------------------------------
 resource "aws_route53_record" "this" {
   for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && (var.zone_id != null || var.public_enabled != null || var.private_enabled != null || var.domain_name != null) }
@@ -125,8 +125,8 @@ resource "aws_route53_record" "this" {
   ]
 }
 
-##----------------------------------------------------------------------------- 
-## Terraform module to create Route53 record sets resource on AWS for Weighted Routing Policy. 
+##-----------------------------------------------------------------------------
+## Terraform module to create Route53 record sets resource on AWS for Weighted Routing Policy.
 ##-----------------------------------------------------------------------------
 resource "aws_route53_zone_association" "default" {
   count   = var.enabled && var.vpc_association_enabled && var.private_enabled ? 1 : 0

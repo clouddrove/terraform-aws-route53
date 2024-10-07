@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 locals {
-  zone_id = "Z08XXXXXXQJXXCJCXXXX" # Route53 Zone ID 
+  zone_id = "Z08XXXXXXQJXXCJCXXXX" # Route53 Zone ID
 }
 
 module "route53" {

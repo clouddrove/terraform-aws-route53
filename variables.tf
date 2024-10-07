@@ -1,5 +1,5 @@
-##----------------------------------------------------------------------------- 
-## Locals declration to determine count of public subnet, private subnet, and nat gateway. 
+##-----------------------------------------------------------------------------
+## Locals declration to determine count of public subnet, private subnet, and nat gateway.
 ##-----------------------------------------------------------------------------
 variable "name" {
   type        = string
@@ -37,7 +37,7 @@ variable "managedby" {
   description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
 }
 
-##----------------------------------------------------------------------------- 
+##-----------------------------------------------------------------------------
 ## Terraform Route53 module variables.
 ##-----------------------------------------------------------------------------
 
