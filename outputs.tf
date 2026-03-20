@@ -1,5 +1,5 @@
-##----------------------------------------------------------------------------- 
-## Terraform module to create Route53 resource on AWS for managing queue. 
+##-----------------------------------------------------------------------------
+## Terraform module to create Route53 resource on AWS for managing queue.
 ##-----------------------------------------------------------------------------
 output "zone_id" {
   value       = var.zone_id != "" ? "" : (var.public_enabled ? join("", aws_route53_zone.public[*].zone_id) : join("", aws_route53_zone.private[*].zone_id))

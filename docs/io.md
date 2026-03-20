@@ -28,4 +28,3 @@
 |------|-------------|
 | tags | A mapping of tags to assign to the resource. |
 | zone\_id | The Hosted Zone ID. This can be referenced by zone records. |
-
