@@ -50,8 +50,8 @@ module "route53" {
       type           = "A"
       set_identifier = "test-1"
       alias = {
-        name    = data.aws_lb.lb_1.dns_name
-        zone_id = data.aws_lb.lb_1.zone_id
+        name    = "dummy-alb-111111.us-east-1.elb.amazonaws.com"
+        zone_id = "Z11SXDOTRQ7X7K"
       }
       weighted_routing_policy = {
         weight = 50
@@ -62,8 +62,8 @@ module "route53" {
       type           = "A"
       set_identifier = "test-2"
       alias = {
-        name    = data.aws_lb.lb_2.dns_name
-        zone_id = data.aws_lb.lb_2.zone_id
+        name    = "dummy-alb-222222.us-east-1.elb.amazonaws.com"
+        zone_id = "Z225XDOTRQ7X7K"
       }
       weighted_routing_policy = {
         weight = 50
