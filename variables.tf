@@ -15,14 +15,8 @@ variable "environment" {
 
 variable "repository" {
   type        = string
-  default     = "https://github.com/clouddrove/terraform-aws-route53"
+  default     = ""
   description = "Terraform current module repo"
-
-  validation {
-    # regex(...) fails if it cannot find a match
-    condition     = can(regex("^https://", var.repository))
-    error_message = "The module-repo value must be a valid Git repo link."
-  }
 }
 
 variable "label_order" {
@@ -33,8 +27,14 @@ variable "label_order" {
 
 variable "managedby" {
   type        = string
-  default     = "anmol@clouddrove.com"
+  default     = ""
   description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
+}
+
+variable "tags" {
+  type        = map(any)
+  default     = {}
+  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
 
 ##-----------------------------------------------------------------------------
