@@ -19,6 +19,8 @@ jobs:
       provider: aws
       enable_plan: true
       show_plan: false
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   public-hostedzone:
     if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
@@ -27,6 +29,8 @@ jobs:
       provider: aws
       enable_plan: true
       show_plan: false
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   records:
     if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
@@ -35,6 +39,8 @@ jobs:
       provider: aws
       enable_plan: true
       show_plan: false
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   vpc-association:
     if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
@@ -43,3 +49,5 @@ jobs:
       provider: aws
       enable_plan: true
       show_plan: false
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
