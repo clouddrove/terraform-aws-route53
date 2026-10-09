@@ -123,3 +123,14 @@ variable "zone_id" {
   default     = ""
   description = "Route53 Zone ID."
 }
+variable "vpc_region" {
+  type        = string
+  default     = null
+  description = "AWS region of the primary VPC for the private hosted zone."
+}
+
+variable "secondary_vpc_region" {
+  type        = string
+  default     = null
+  description = "AWS region of the secondary VPC association."
+}
