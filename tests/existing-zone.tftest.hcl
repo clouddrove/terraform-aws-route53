@@ -2,12 +2,12 @@
 mock_provider "aws" {}
 
 variables {
-  enabled        = true
-  domain_name    = "example.com"
-  zone_id        = "Z0123456789ABCDEF"
-  public_enabled = false
+  enabled         = true
+  domain_name     = "example.com"
+  zone_id         = "Z0123456789ABCDEF"
+  public_enabled  = false
   private_enabled = false
-  record_enabled = true
+  record_enabled  = true
 
   records = [
     {

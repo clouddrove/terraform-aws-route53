@@ -90,7 +90,7 @@ variable "comment" {
 
 variable "force_destroy" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
 }
 
@@ -123,6 +123,7 @@ variable "zone_id" {
   default     = ""
   description = "Route53 Zone ID."
 }
+
 variable "vpc_region" {
   type        = string
   default     = null

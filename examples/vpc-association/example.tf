@@ -15,5 +15,6 @@ module "route53" {
   domain_name = "clouddrove.com"
   vpc_id      = "vpc-xxxxxxxxxxxxxx"
 
-  secondary_vpc_id = "vpc-xxxxxxxxxxxxxx"
+  vpc_association_enabled = true
+  secondary_vpc_id        = "vpc-yyyyyyyyyyyyyy" # Must differ from vpc_id (or use a different secondary_vpc_region)
 }

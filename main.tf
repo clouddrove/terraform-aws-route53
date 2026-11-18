@@ -153,11 +153,14 @@ resource "aws_route53_record" "this" {
   ## Create DNS records only when the module and records are enabled.
   ##---------------------------------------------------------------------------
 
-  for_each = (
-    var.enabled && var.record_enabled
-    ? local.recordsets
-    : {}
-  )
+  ## A filtered for-expression is used instead of a conditional because
+  ## records with different shapes (alias vs. records, routing policies)
+  ## produce an object type that is not compatible with an empty map.
+  for_each = {
+    for key, rs in local.recordsets :
+    key => rs
+    if var.enabled && var.record_enabled
+  }
 
   zone_id = local.zone_id
 
@@ -208,8 +211,9 @@ resource "aws_route53_record" "this" {
   ##---------------------------------------------------------------------------
   ## Alias Records
   ##
-  ## The target hosted zone ID must be supplied explicitly.
-  ## Examples include ALB, NLB, CloudFront or another Route53 record.
+  ## Target hosted zone ID of the alias target (ALB, NLB, CloudFront, ...).
+  ## Falls back to the module's own zone for aliases to records in the
+  ## same hosted zone (backward compatible with previous releases).
   ##---------------------------------------------------------------------------
 
   dynamic "alias" {
@@ -219,7 +223,7 @@ resource "aws_route53_record" "this" {
 
     content {
       name    = alias.value.name
-      zone_id = alias.value.zone_id
+      zone_id = try(alias.value.zone_id, local.zone_id)
 
       evaluate_target_health = lookup(
         alias.value,
@@ -322,14 +326,14 @@ resource "aws_route53_record" "this" {
       error_message = "A DNS record cannot contain both alias and records."
     }
 
-    ## Ensure alias target zone ID exists.
+    ## Ensure alias target zone ID is not blank when supplied.
     precondition {
       condition = (
-        try(each.value.alias, null) == null ||
+        try(each.value.alias.zone_id, null) == null ||
         try(length(trimspace(each.value.alias.zone_id)) > 0, false)
       )
 
-      error_message = "Alias record must specify a valid target zone_id."
+      error_message = "Alias record zone_id must not be empty."
     }
   }
 
@@ -370,7 +374,7 @@ resource "aws_route53_zone_association" "default" {
     precondition {
       condition = !(
         var.secondary_vpc_id == var.vpc_id &&
-        coalesce(var.secondary_vpc_region, "") == coalesce(var.vpc_region, "")
+        var.secondary_vpc_region == var.vpc_region
       )
 
       error_message = "Secondary VPC association must be different from the primary VPC association."
