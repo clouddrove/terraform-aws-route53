@@ -90,7 +90,7 @@ variable "comment" {
 
 variable "force_destroy" {
   type        = bool
-  default     = true
+  default     = false
   description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
 }
 
@@ -122,4 +122,16 @@ variable "zone_id" {
   type        = string
   default     = ""
   description = "Route53 Zone ID."
+}
+
+variable "vpc_region" {
+  type        = string
+  default     = null
+  description = "AWS region of the primary VPC for the private hosted zone."
+}
+
+variable "secondary_vpc_region" {
+  type        = string
+  default     = null
+  description = "AWS region of the secondary VPC association."
 }
