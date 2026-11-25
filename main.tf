@@ -12,10 +12,7 @@ locals {
   ##   Convert `records` from list to map with unique keys
   ##-----------------------------------------------------------------------------
   recordsets = { for rs in local.records : try(rs.key, join(" ", compact(["${rs.name} ${rs.type}", try(rs.set_identifier, "")]))) => rs }
-  zone_id = var.zone_id != "" ? var.zone_id : (
-    var.enabled && var.private_enabled ? try(aws_route53_zone.private[0].zone_id, "") :
-    var.enabled && var.public_enabled ? try(aws_route53_zone.public[0].zone_id, "") : ""
-  )
+  zone_id    = var.enabled ? (var.zone_id != "" ? var.zone_id : (var.private_enabled ? aws_route53_zone.private[0].zone_id : aws_route53_zone.public[0].zone_id)) : ""
 }
 
 ##-----------------------------------------------------------------------------
@@ -46,15 +43,7 @@ resource "aws_route53_zone" "private" {
   force_destroy = var.force_destroy
   tags          = module.labels.tags
   vpc {
-    vpc_id     = var.vpc_id
-    vpc_region = var.vpc_region
-  }
-
-  # The AWS provider warns against managing inline and standalone VPC
-  # associations together. The secondary association resource below needs the
-  # inline association ignored to avoid perpetual diffs.
-  lifecycle {
-    ignore_changes = [vpc]
+    vpc_id = var.vpc_id
   }
 }
 
@@ -90,7 +79,7 @@ resource "aws_route53_hosted_zone_dnssec" "this" {
 ## Terraform module to create Route53 record sets resource on AWS.
 ##-----------------------------------------------------------------------------
 resource "aws_route53_record" "this" {
-  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && (var.zone_id != "" || var.private_enabled || var.public_enabled) }
+  for_each = { for k, v in local.recordsets : k => v if var.enabled && var.record_enabled && (var.zone_id != null || var.public_enabled != null || var.private_enabled != null || var.domain_name != null) }
 
   zone_id = local.zone_id
 
@@ -184,8 +173,7 @@ resource "aws_route53_record" "this" {
 ## Terraform module to create Route53 record sets resource on AWS for Weighted Routing Policy.
 ##-----------------------------------------------------------------------------
 resource "aws_route53_zone_association" "default" {
-  count      = var.enabled && var.vpc_association_enabled && var.private_enabled && var.secondary_vpc_id != "" ? 1 : 0
-  zone_id    = aws_route53_zone.private[0].zone_id
-  vpc_id     = var.secondary_vpc_id
-  vpc_region = var.secondary_vpc_region
+  count   = var.enabled && var.vpc_association_enabled && var.private_enabled ? 1 : 0
+  zone_id = aws_route53_zone.private[0].zone_id
+  vpc_id  = var.secondary_vpc_id
 }

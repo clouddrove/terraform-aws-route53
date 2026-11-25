@@ -51,33 +51,18 @@ variable "record_enabled" {
   type        = bool
   default     = false
   description = "Whether to create Route53 record set."
-
-  validation {
-    condition     = !var.record_enabled || var.zone_id != "" || var.private_enabled || var.public_enabled
-    error_message = "record_enabled requires zone_id or a hosted zone enabled by this module."
-  }
 }
 
 variable "private_enabled" {
   type        = bool
   default     = false
   description = "Whether to create private Route53 zone."
-
-  validation {
-    condition     = !var.private_enabled || var.vpc_id != ""
-    error_message = "vpc_id must be set when private_enabled is true."
-  }
 }
 
 variable "public_enabled" {
   type        = bool
   default     = false
   description = "Whether to create public Route53 zone."
-
-  validation {
-    condition     = !(var.private_enabled && var.public_enabled)
-    error_message = "Choose either private_enabled or public_enabled; a single module instance cannot create both zone types."
-  }
 }
 
 variable "records" {
@@ -154,33 +139,16 @@ variable "vpc_id" {
   description = "VPC ID."
 }
 
-variable "vpc_region" {
-  type        = string
-  default     = null
-  description = "AWS Region of the VPC associated with the private hosted zone. Defaults to the configured AWS provider region."
-}
-
 variable "vpc_association_enabled" {
   type        = bool
   default     = false
   description = "Whether to create Route53 vpc association."
-
-  validation {
-    condition     = !var.vpc_association_enabled || (var.private_enabled && var.secondary_vpc_id != "")
-    error_message = "vpc_association_enabled requires private_enabled and a non-empty secondary_vpc_id."
-  }
 }
 
 variable "secondary_vpc_id" {
   type        = string
   default     = ""
   description = "The VPC to associate with the private hosted zone."
-}
-
-variable "secondary_vpc_region" {
-  type        = string
-  default     = null
-  description = "AWS Region of the additional VPC associated with the private hosted zone. Defaults to the configured AWS provider region."
 }
 
 variable "zone_id" {

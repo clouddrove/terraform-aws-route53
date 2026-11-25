@@ -21,10 +21,8 @@
 | records\_jsonencoded | List of map of DNS records (stored as jsonencoded string, for terragrunt) | `string` | `null` | no |
 | repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-route53"` | no |
 | secondary\_vpc\_id | The VPC to associate with the private hosted zone. | `string` | `""` | no |
-| secondary\_vpc\_region | AWS Region of the additional VPC associated with the private hosted zone. Defaults to the configured AWS provider region. | `string` | `null` | no |
 | vpc\_association\_enabled | Whether to create Route53 vpc association. | `bool` | `false` | no |
 | vpc\_id | VPC ID. | `string` | `""` | no |
-| vpc\_region | AWS Region of the VPC associated with the private hosted zone. Defaults to the configured AWS provider region. | `string` | `null` | no |
 | zone\_id | Route53 Zone ID. | `string` | `""` | no |
 
 ## Outputs
