@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "eu-west-1"
+  region = "ca-central-1"
 }
 
 module "route53" {
@@ -15,5 +15,6 @@ module "route53" {
   domain_name = "clouddrove.com"
   vpc_id      = "vpc-xxxxxxxxxxxxxx"
 
-  secondary_vpc_id = "vpc-xxxxxxxxxxxxxx"
+  secondary_vpc_id     = "vpc-xxxxxxxxxxxxxx"
+  secondary_vpc_region = "ca-central-1"
 }

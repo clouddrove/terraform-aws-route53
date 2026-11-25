@@ -50,6 +50,8 @@ We are a group of DevOps engineers & architects, joining hands in this ever evol
 
 This module includes Terraform open source, examples, and automation tests (for better understanding), which would help you create and improve your infrastructure with minimalistic coding.
 
+The module supports simple, failover, geolocation, geoproximity, latency, IP-based (CIDR), multivalue, and weighted record routing. Create Route 53 CIDR collections and locations separately, then pass their IDs/names to `cidr_routing_policy`. Public zones can optionally enable DNSSEC signing; provide a DNSSEC compatible KMS key ARN from `us-east-1` and publish the `dnssec_ds_record` output in the parent zone or at the registrar. AWS provider configuration stays in the calling configuration; the examples use `ca-central-1`.
+
 
 
 
@@ -59,8 +61,8 @@ This table contains both Prerequisites and Providers:
 
 | Description   | Name                                       | Version   |
 |:-------------:|:-------------------------------------------:|:---------:|
-| **Prerequisite** | [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) | >= 1.6.6 |
-| **Provider** | [aws](https://aws.amazon.com/) | >= 5.31.0 |
+| **Prerequisite** | [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) | >= 1.10.0 |
+| **Provider** | [aws](https://aws.amazon.com/) | >= 5.80.0 |
 
 
 
