@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "ca-central-1"
 }
 
 locals {
@@ -35,6 +35,28 @@ module "route53" {
       set_identifier = "europe"
       geolocation_routing_policy = {
         continent = "EU"
+      }
+    },
+    {
+      name           = "proximity"
+      type           = "A"
+      set_identifier = "canada"
+      records        = ["192.0.2.20"]
+      ttl            = 300
+      geoproximity_routing_policy = {
+        aws_region = "ca-central-1"
+        bias       = 0
+      }
+    },
+    {
+      name           = "ip-routed"
+      type           = "A"
+      set_identifier = "canada-cidrs"
+      records        = ["192.0.2.30"]
+      ttl            = 300
+      cidr_routing_policy = {
+        collection_id = "C1A2B3C4D5E6F7" # Replace with an existing Route 53 CIDR collection ID.
+        location_name = "canada"         # Replace with a location in that collection.
       }
     },
     {

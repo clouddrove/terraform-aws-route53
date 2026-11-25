@@ -94,6 +94,39 @@ variable "force_destroy" {
   description = "Whether to destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
 }
 
+variable "dnssec_enabled" {
+  type        = bool
+  default     = false
+  description = "Whether to enable DNSSEC signing for the public hosted zone. Supply a Route 53 compatible KMS key ARN and coordinate the DS record with the parent zone or registrar."
+
+  validation {
+    condition     = !var.dnssec_enabled || (!var.private_enabled && (var.public_enabled || var.zone_id != ""))
+    error_message = "dnssec_enabled requires a public hosted zone created by this module or a public zone_id, and cannot be used with private_enabled."
+  }
+}
+
+variable "dnssec_kms_key_arn" {
+  type        = string
+  default     = ""
+  description = "ARN of the customer managed KMS key used by the Route 53 DNSSEC key-signing key. The KMS key must be in us-east-1 and meet Route 53 DNSSEC requirements."
+
+  validation {
+    condition     = !var.dnssec_enabled || var.dnssec_kms_key_arn != ""
+    error_message = "dnssec_kms_key_arn must be set when dnssec_enabled is true."
+  }
+}
+
+variable "dnssec_key_name" {
+  type        = string
+  default     = ""
+  description = "Name for the Route 53 DNSSEC key-signing key."
+
+  validation {
+    condition     = !var.dnssec_enabled || var.dnssec_key_name != ""
+    error_message = "dnssec_key_name must be set when dnssec_enabled is true."
+  }
+}
+
 variable "delegation_set_id" {
   type        = string
   default     = ""

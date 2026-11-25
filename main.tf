@@ -60,6 +60,21 @@ resource "aws_route53_zone" "public" {
   tags              = module.labels.tags
 }
 
+resource "aws_route53_key_signing_key" "this" {
+  count = var.enabled && var.dnssec_enabled ? 1 : 0
+
+  hosted_zone_id             = local.zone_id
+  key_management_service_arn = var.dnssec_kms_key_arn
+  name                       = var.dnssec_key_name
+}
+
+resource "aws_route53_hosted_zone_dnssec" "this" {
+  count = var.enabled && var.dnssec_enabled ? 1 : 0
+
+  hosted_zone_id = local.zone_id
+  depends_on     = [aws_route53_key_signing_key.this]
+}
+
 ##-----------------------------------------------------------------------------
 ## Terraform module to create Route53 record sets resource on AWS.
 ##-----------------------------------------------------------------------------
@@ -118,6 +133,34 @@ resource "aws_route53_record" "this" {
       continent   = lookup(each.value.geolocation_routing_policy, "continent", null)
       country     = lookup(each.value.geolocation_routing_policy, "country", null)
       subdivision = lookup(each.value.geolocation_routing_policy, "subdivision", null)
+    }
+  }
+
+  dynamic "geoproximity_routing_policy" {
+    for_each = length(keys(lookup(each.value, "geoproximity_routing_policy", {}))) == 0 ? [] : [each.value.geoproximity_routing_policy]
+
+    content {
+      aws_region       = try(geoproximity_routing_policy.value.aws_region, null)
+      bias             = try(geoproximity_routing_policy.value.bias, null)
+      local_zone_group = try(geoproximity_routing_policy.value.local_zone_group, null)
+
+      dynamic "coordinates" {
+        for_each = try(geoproximity_routing_policy.value.coordinates, null) == null ? [] : [geoproximity_routing_policy.value.coordinates]
+
+        content {
+          latitude  = coordinates.value.latitude
+          longitude = coordinates.value.longitude
+        }
+      }
+    }
+  }
+
+  dynamic "cidr_routing_policy" {
+    for_each = length(keys(lookup(each.value, "cidr_routing_policy", {}))) == 0 ? [] : [each.value.cidr_routing_policy]
+
+    content {
+      collection_id = cidr_routing_policy.value.collection_id
+      location_name = cidr_routing_policy.value.location_name
     }
   }
   depends_on = [
