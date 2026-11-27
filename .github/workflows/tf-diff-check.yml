@@ -1,0 +1,55 @@
+---
+name: Terraform Difference Checks
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+
+on:
+  pull_request:
+    paths:
+      - '**/*.tf'
+      - '*.tf'
+jobs:
+  tf-checks-private-hostedzone-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/private-hostedzone/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+  tf-checks-public-hostedzone-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/public-hostedzone/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+  tf-checks-records-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/records/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+  tf-checks-vpc-association-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/vpc-association/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}    

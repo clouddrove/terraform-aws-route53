@@ -1,7 +1,16 @@
 name: tfsec
 permissions: write-all
 on:
+  push:
+    branches:
+      - master
+    paths:
+      - '**/*.tf'
+      - '*.tf'
   pull_request:
+    paths:
+      - '**/*.tf'
+      - '*.tf'
   workflow_dispatch:
 jobs:
   tfsec:
